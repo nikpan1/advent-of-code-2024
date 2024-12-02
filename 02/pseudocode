@@ -1,0 +1,7 @@
+1. make a flag 'coefficient'
+2. coef = (0 < FIRST_VAL - SECOND_VAL < 3)
+1 2 3
+
+3. coef = coef && (0 < FIRST_VAL - SECOND_VAL < 2)
+
+3. coef = coef & FIRST_VAL - SECOND_VAL
