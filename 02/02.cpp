@@ -8,27 +8,32 @@
 #include <vector>
 #include <sstream>
 #include <filesystem>
+#include <bits/ranges_util.h>
 
 using ListOfLists = std::vector<std::vector<int>>;
 
-ListOfLists loadInput(const std::string& filename) {
+ListOfLists loadInput(const std::string& filename)
+{
     std::vector<std::vector<int>> result;
     std::ifstream file(filename);
 
-    if (!file) {
+    if (!file)
+    {
         throw std::runtime_error("Failed to open file: " + filename);
     }
 
     std::string line;
-    while (std::getline(file, line)) {
+    while (std::getline(file, line))
+    {
         std::vector<int> row;
         std::stringstream ss(line);
         int num;
 
-        while (ss >> num) {
+        while (ss >> num)
+        {
             row.push_back(num);
         }
-            result.push_back(row);
+        result.push_back(row);
     }
 
     return result;
@@ -58,7 +63,7 @@ bool isReportSave(const std::vector<int>& report)
         if (isNumberPositive(distance) != coefficient) return false;
         if (!isInRange(distance)) return false;
     }
-    
+
     return true;
 }
 
@@ -68,21 +73,30 @@ bool isReportSave(const std::vector<int>& report)
 
 bool isReportSaveForSure(const std::vector<int>& report)
 {
-    int badLevelCounter = 0;
+    std::vector<int> distances;
+    distances.reserve(report.size() - 1);
 
-    bool coefficient = isNumberPositive(report[0] - report[report.size() - 1]);
     for (int i = 0; i < report.size() - 1; i++)
     {
-        int distance = report[i] - report[i + 1];
-        if (isNumberPositive(distance) != coefficient || !isInRange(distance)) badLevelCounter ++;;
+        distances.push_back(report[i] - report[i + 1]);
     }
 
-    return badLevelCounter > 1;
+    int un = 0;
+    int positives = 0, negatives = 0;
+    for (const auto distance : distances)
+    {
+        if (!isInRange(distance)) un++;
+        if (distance >= 0) positives++;
+        if (distance < 0) negatives++;
+    }
+
+    return un < 2 && std::min(positives, negatives) < 2;
 }
 
 // ---------------------------------------------------------------------------------------------
 
-int main() {
+int main()
+{
     // write working directory
     std::filesystem::path cwd = std::filesystem::current_path();
     std::cout << "Current working directory: " << cwd << std::endl;
@@ -94,18 +108,19 @@ int main() {
 
     // Part one
     int result = 0;
-    for (const auto& report : listOfLists) {
+    for (const auto& report : listOfLists)
+    {
         result += isReportSave(report);
     }
 
-    std::cout << result << std::endl;
+    std::cout << "Part 1: " << result << std::endl;
 
     // Part two
     result = 0;
-    for (const auto& report : listOfLists) {
+    for (const auto& report : listOfLists)
+    {
         result += isReportSaveForSure(report);
     }
 
-    std::cout << result << std::endl;
-
+    std::cout << "Part 2: " << result << std::endl;
 }
