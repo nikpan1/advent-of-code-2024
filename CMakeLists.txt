@@ -7,4 +7,5 @@ add_executable(aoc2024
         template/template.cpp
         00/00.cpp
         01/01.cpp
-        02/02.cpp)
+        02/02.cpp
+        03/03.cpp)
