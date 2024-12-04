@@ -8,4 +8,5 @@ add_executable(aoc2024
         00/00.cpp
         01/01.cpp
         02/02.cpp
-        03/03.cpp)
+        03/03.cpp
+        04/04.cpp)
